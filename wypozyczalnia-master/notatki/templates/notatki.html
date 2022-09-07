@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+<script>
+
+    function myFunction1() {
+
+        document.getElementById("id_opis").style.display = "none";
+        document.getElementById("id_status").type = "hidden";
+        document.getElementById("id_data_wykonania").type = "hidden";
+        document.getElementById("data").valueAsDate = new Date();
+    }
+    function myFunction() {
+        document.getElementById("id_opis").value = document.getElementById("opis").value;
+        document.getElementById("id_status").value = document.getElementById("status").value;
+        document.getElementById("id_data_wykonania").value = document.getElementById("data").value;
+        var opis = document.getElementById("opis").value;
+        if (opis.length == 0) {
+            document.getElementById('divek').className = "alert1 show";
+            document.getElementById('divek').className = "alert1 showAlert";
+            document.getElementById('dodaj').disabled = true;
+        }
+       
+    }
+    function notatka() {
+        document.getElementById('dodaj').disabled = false;
+        var opis = document.getElementById("opis").value;
+        if (opis.length == 0) {
+            document.getElementById('divek').className = "alert1 show";
+            document.getElementById('divek').className = "alert1 showAlert";
+            document.getElementById('dodaj').disabled = true;
+        }
+    }
+    function data() {
+        document.getElementById('dodaj').disabled = false;
+        var data = new Date(document.getElementById("data").value);
+        var data_dzisiaj = new Date();
+        var dzienDzisiaj = new Date().getDate();
+        var miesiac_aktualny = data_dzisiaj.getMonth() + 1;
+        var dataformat = data_dzisiaj.getFullYear() + "-" + 0 + (data_dzisiaj.getMonth() + 1) + "-" + data_dzisiaj.getDate();
+        console.log(dataformat);
+        if (data.getDate() < dzienDzisiaj && data.getMonth() + 1 == miesiac_aktualny) {
+            // document.getElementById("data").value = dataformat;
+            document.getElementById('dataalert').className = "alert1 show";
+            document.getElementById('dataalert').className = "alert1 showAlert";
+            document.getElementById('dodaj').disabled = true;
+
+        }
+    }
+    function bladWyl() {
+        document.getElementById('divek').className = "alert1 hide";
+        document.getElementById('dataalert').className = "alert1 hide";
+    }
+</script>
+<style>
+
+    input:not(:placeholder-shown):invalid {
+        border-color: red;
+        outline: none;
+        box-shadow: 0 0 2px red;
+    }
+
+    input:not(:placeholder-shown):required:valid {
+        border-color: #4dcc23;
+        outline: none;
+        box-shadow: 0 0 2px #4dcc23;
+    }
+
+
+    #opis {
+        margin-left: 10px;
+        width: 500px;
+        height: 100px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        resize: none;
+    }
+
+    #box {
+        width: 500px;
+        overflow: hidden;
+        background: #f1f1f1;
+        box-shadow: 0 0 20px black;
+        border-radius: 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 9999;
+        padding: 10px;
+        text-align: center;
+        display: none;
+    }
+
+        #box h1 {
+            color: #333;
+        }
+
+    #close {
+        font-size: 20px;
+        color: white;
+        padding: 10px 30px;
+        cursor: pointer;
+        background: #3498db;
+        display: inline-block;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="glowny">
+    <p style="margin-left: 10px;">Wprowadź treść zadania</p>
+    <textarea onchange="notatka()" id="opis" placeholder="Treść zadania"></textarea>
+    <div style="display: flex; width: 650px; justify-content: space-between; margin: auto;">
+        <div>
+            <p>Wybierz status</p>
+            <select id="status" class="btn btn-primary">
+                <option value="Ważne">Ważne</option>
+                <option value="Normalne">Normalne</option>
+                <option value="Niskie">Niskie</option>
+            </select>
+        </div>
+        <div>
+            <p>Wybierz date</p>
+            <input class="btn btn-primary" type="date" id="data" name="trip-start" onchange="data()"
+                   value="2021-04-30"
+                   min="2020-01-01" max="2022-12-31">
+        </div>
+    </div>
+    <form style="font-family: 'Advent Pro', serif; color: white; margin-left:250px;" method="post">
+        {% csrf_token %}
+        {{form.data_wykonania}}
+        {{form.opis}}
+        {{form.status}}
+        <button name="dodaj" style="margin-left:80%" type="submit" class="btn btn-success" onclick="myFunction()" id="dodaj">Dodaj notatke</button>
+    </form>
+
+    <h1 style="margin-left: 3px; color: white; font-family: 'Advent Pro', serif; margin-top:50px">Dzisiejsze zadania do wykonania</h1>
+    <div style="margin-left: 3px; color: white; font-family: 'Advent Pro', serif; float: left; width: 100%; text-align: center; margin-top:10px">
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="font-family: 'Advent Pro'" scope="col">Opis</th>
+                    <th style="font-family: 'Advent Pro'" scope="col">Data wykonania</th>
+                    <th style="font-family: 'Advent Pro'" scope="col">Status</th>
+                    <th style="font-family: 'Advent Pro'" scope="col"></th>
+                </tr>
+                {% for notatka in notatki %}
+                <tr>
+                    <td style="color:white;font-family: 'Advent Pro'" scope="row">{{notatka.opis}}</td>
+                    <td style="color:white;font-family: 'Advent Pro'">{{ notatka.data_wykonania }}</td>
+                    <td style="color:white;font-family: 'Advent Pro'">{{ notatka.status }}</td>
+                    <td style="color:white;font-family: 'Advent Pro'"><a href="{% url 'dane_notatki' pk=notatka.pk %}"><button class="btn btn-primary" name="zakoncz">Zakończ</button></a></td>
+                </tr>
+                {% endfor %}
+            </thead>
+        </table>
+    </div>
+
+</div>
+
+
+<div id="divek" class="alert1 hide">
+    <span class="fas fa-exclamation-circle"></span>
+    <span class="msg">Przy dodawaniu notatki wymagana jest treść</span>
+    <div onclick="bladWyl()" class="close-btn">
+        <span class="fas fa-times"></span>
+    </div>
+</div>
+<div id="dataalert" class="alert1 hide">
+    <span class="fas fa-exclamation-circle"></span>
+    <span class="msg">Wybrałeś dzień rozpoczęcia wcześniejszy od dnia dzisiejszego</span>
+    <div onclick="bladWyl()" class="close-btn">
+        <span class="fas fa-times"></span>
+    </div>
+</div>
+
+    {% endblock %}

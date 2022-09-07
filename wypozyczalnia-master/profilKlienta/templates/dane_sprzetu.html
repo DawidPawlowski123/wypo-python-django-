@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+   {% block content %}
+<script>
+    function myFunction1() {
+
+        document.getElementById("id_nazwa").type = "hidden";
+        document.getElementById("id_cena_godzina").type = "hidden";
+        document.getElementById("id_nr_seryjny").type = "hidden";
+        document.getElementById("id_dostepnosc").type = "hidden";
+        document.getElementById("id_informacje_awaria").style.visibility = 'hidden';
+    }
+    function awaria() {
+        document.getElementById("id_informacje_awaria").value = document.getElementById("info_awaria").value;
+        var informacje = document.getElementById("info_awaria").value;
+        if (informacje.length > 200) {
+            document.getElementById('divek3').className = "alert1 show";
+            document.getElementById('divek3').className = "alert1 showAlert"; 
+            document.getElementById("id_informacje_awaria").value = "";
+        }
+        else if (informacje.length == 0) {
+            document.getElementById('divek').className = "alert1 show";
+            document.getElementById('divek').className = "alert1 showAlert";
+            document.getElementById("id_informacje_awaria").value = "";
+        }
+        if (document.getElementById("id_dostepnosc").value == "Wypozyczone") {
+            document.getElementById('divek4').className = "alert1 show";
+            document.getElementById('divek4').className = "alert1 showAlert";
+            document.getElementById("id_informacje_awaria").value = "";
+        }
+        else {
+            document.getElementById("id_dostepnosc").value = "Awaria";
+        }
+        var d = document.getElementsByClassName("alert1 showAlert");
+        d[1].style.top = "100px";
+        d[2].style.top = "190px";
+        
+    }
+
+    function bladWyl() {
+        document.getElementById('divek').className = "alert1 hide"
+        document.getElementById('divek3').className = "alert1 hide"
+    }
+    function bladWylDostepnosc() {
+        document.getElementById('divek4').className = "alert1 hide"
+    }
+</script>
+<style>
+    #info_awaria {
+        margin-left: 275px;
+        width: 500px;
+        height: 100px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        resize: none;
+    }
+
+    .btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: #e74c3c;
+        font-size: 20px;
+        color: white;
+        padding: 10px 30px;
+        cursor: pointer;
+    }
+
+    #box {
+        width: 500px;
+        overflow: hidden;
+        background: #f1f1f1;
+        box-shadow: 0 0 20px black;
+        border-radius: 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 9999;
+        padding: 10px;
+        text-align: center;
+        display: none;
+    }
+
+        #box h1 {
+            color: #333;
+        }
+
+    #close {
+        font-size: 20px;
+        color: white;
+        padding: 10px 30px;
+        cursor: pointer;
+        background: #3498db;
+        display: inline-block;
+        border-radius: 4px;
+    }
+
+
+
+
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+    .alert {
+        background: #ffdb9b;
+        padding: 20px 40px;
+        min-width: 420px;
+        position: absolute;
+        right: 0;
+        top: 10px;
+        border-radius: 4px;
+        border-left: 8px solid #ffa502;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+        .alert.showAlert {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .alert.show {
+            animation: show_slide 1s ease forwards;
+        }
+
+    .alert.hide {
+        animation: hide_slide 1s ease forwards;
+    }
+
+    .alert .fa-exclamation-circle {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #ce8500;
+        font-size: 30px;
+    }
+
+    .alert .msg {
+        padding: 0 20px;
+        font-size: 18px;
+        color: #ce8500;
+    }
+
+    .alert .close-btn {
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #ffd080;
+        padding: 20px 18px;
+        cursor: pointer;
+    }
+
+        .alert .close-btn:hover {
+            background: #ffc766;
+        }
+
+        .alert .close-btn .fas {
+            color: #ce8500;
+            font-size: 22px;
+            line-height: 40px;
+        }
+
+
+
+
+
+</style>
+<div class="glowny">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th style="font-family: 'Advent Pro'" scope="col">ID</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Nazwa</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Cena/h</th>
+                <th style="font-family: 'Advent Pro'" scope="col">nr_seryjny</th>
+                <th style="font-family: 'Advent Pro'" scope="col">dostępność</th>
+            </tr>
+
+            <tr>
+                <td scope="row" style="color:white;font-family: 'Advent Pro'">{{ sprzet.id }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ sprzet.nazwa }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ sprzet.cena_godzina }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ sprzet.nr_seryjny }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ sprzet.dostepnosc }}</td>
+            </tr>
+        </thead>
+    </table>
+    <input type="hidden" value="{{ klient.id }}" id="td" />
+
+
+
+    <div id="divek" class="alert hide">
+        <span class="fas fa-exclamation-circle"></span>
+        <span class="msg">Przy awarii informacje są obowiązkowe</span>
+        <div onclick="bladWyl()" id="divek2" class="close-btn">
+            <span class="fas fa-times"></span>
+        </div>
+    </div>
+
+    <div id="divek3" class="alert hide">
+        <span class="fas fa-exclamation-circle"></span>
+        <span class="msg">Wiadomość informacji awarii jest za długa maksymalna ilość znaków 200</span>
+        <div onclick="bladWyl()" id="divek2" class="close-btn">
+            <span class="fas fa-times"></span>
+        </div>
+    </div>
+
+    <div id="divek4" class="alert hide">
+        <span class="fas fa-exclamation-circle"></span>
+        <span class="msg">Rower z statusem wypozyczony nie można dodać awarii</span>
+        <div onclick="bladWylDostepnosc()" id="divek2" class="close-btn">
+            <span class="fas fa-times"></span>
+        </div>
+    </div>
+
+
+</div>
+<textarea style="margin-left: 260px; margin-top: 100px" id="info_awaria" placeholder="Informacje o awarii"></textarea>
+<div class="glowny">
+
+
+    <form style="font-family: 'Advent Pro', serif; color: white;" method="post">
+        {% csrf_token %}
+
+        {{form.nazwa}}
+
+        {{form.cena_godzina}}
+
+        {{form.nr_seryjny}}
+
+        {{form.dostepnosc}}
+
+        {{form.informacje_awaria}}
+
+        <button style="margin-left: 249px; margin-top: 70px" onclick="awaria()" type="submit" class="btn btn-primary" name="b_awaria" id="b_awaria">Awaria</button>
+    </form>
+
+
+</div>
+    {% endblock %}

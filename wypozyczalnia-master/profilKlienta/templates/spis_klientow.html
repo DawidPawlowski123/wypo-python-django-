@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+   {% block content %}
+<div class="glowny">
+
+    <div class="input-group-append">
+        <form method="GET" action="{% url 'spis_klientow' %}">
+            <input type="search" name="q" class="form-control" value="{{request.GET.q}}" placeholder="Szukaj" style="max-width:300px">
+        </form>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th style="font-family: 'Advent Pro'" scope="col">ID</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Imie</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Nazwisko</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Nr dokumentu</th>
+                <th style="font-family: 'Advent Pro'" scope="col">E-mail</th>
+                <th style="font-family: 'Advent Pro'" scope="col">Nr telefonu</th>
+                <th style="font-family: 'Advent Pro'" scope="col"></th>
+            </tr>
+            {% for klient in obj %}
+            <tr>
+                <td style="color:white; font-family: 'Advent Pro'" scope="row">{{ klient.id }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ klient.imie }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ klient.nazwisko }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ klient.nr_dokumentu }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ klient.e_mail }}</td>
+                <td style="color:white;font-family: 'Advent Pro'">{{ klient.nr_telefonu }}</td>
+                <td style="color:white;font-family: 'Advent Pro'"><a href="{% url 'dane_klienta' pk=klient.pk %}"><button id="szczegoly{{ klient.id }}" class="btn btn-primary" name="zakoncz">Szczegóły</button></a></td>
+            </tr>
+            {% endfor %}
+    </table>
+    
+</div>
+    {% endblock %}

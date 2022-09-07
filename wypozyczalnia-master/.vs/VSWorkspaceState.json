@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\mysite",
+    "\\notatki",
+    "\\notatki\\migrations",
+    "\\sprzet",
+    "\\sprzet\\templates",
+    "\\static",
+    "\\static\\css",
+    "\\wypozyczenie",
+    "\\wypozyczenie\\templates"
+  ],
+  "SelectedNode": "\\mysite\\settings.py",
+  "PreviewInSolutionExplorer": false
+}
